@@ -9,5 +9,5 @@ indent_style = space
 trim_trailing_whitespace = true
 max_line_length = 120
 
-[*.{md,js}]
-indent_size = 2
+[*.{md,json}]
+trim_trailing_whitespace = false

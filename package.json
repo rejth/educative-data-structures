@@ -1,18 +1,26 @@
 {
-  "name": "educative-data-structures",
+  "name": "ds-challenges",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "prettier:fix": "prettier  --write src/**/*.js",
-    "js:check": "eslint --debug src/**/*.js",
-    "js:fix": "eslint src/**/*.js --fix"
+    "format:fix": "prettier  --write src/**/*.js",
+    "lint:check": "eslint --debug src/**/*.js",
+    "lint:fix": "eslint src/**/*.js --fix",
+    "prepare": "husky install"
   },
   "author": "",
   "license": "ISC",
+  "lint-staged": {
+    "*.js": [
+      "npm run format:fix",
+      "npm run lint:fix"
+    ]
+  },
   "devDependencies": {
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
-    "prettier": "^3.0.3"
+    "prettier": "^3.0.3",
+    "husky": "^8.0.0"
   }
 }
