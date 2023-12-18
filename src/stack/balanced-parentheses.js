@@ -11,11 +11,10 @@ function isBalanced(str) {
     }
   }
 
-  if (stack.length) return false;
-  return true;
+  return !stack.length;
 }
 
 // the number of opened and closed parentheses of a certain type must be equal
-// opened and closed parentheses of diffrent types following one by one are not allowed
+// opened and closed parentheses of different types following one by one are not allowed
 
 console.log(isBalanced('{[({})]}'));

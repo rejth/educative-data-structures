@@ -127,8 +127,7 @@ class LinkedList {
     if (this.isEmpty()) return undefined;
 
     const set = new Set();
-    const getData = (obj) =>
-      typeof obj === 'object' ? JSON.stringify(obj) : obj;
+    const getData = (obj) => (typeof obj === 'object' ? JSON.stringify(obj) : obj);
     let current = this.head;
 
     while (current.next) {

@@ -31,7 +31,7 @@ function findSum(arr, target) {
 
 console.log(findSum([1, 21, 3, 14, 5, 60, 7, 6], 81));
 
-// Time complexity: O(logn)
+// Time complexity: O(log(n))
 function binarySearch(arr, target) {
   let start = 0;
   let end = arr.length - 1;
@@ -48,7 +48,7 @@ function binarySearch(arr, target) {
   }
 }
 
-// Time complexity: O(nlogn)
+// Time complexity: O(nlog(n))
 function findSumBinarySearch(arr, target) {
   let index;
 

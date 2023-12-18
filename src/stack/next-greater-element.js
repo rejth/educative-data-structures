@@ -17,6 +17,8 @@ function mapNextGreater(arr) {
   return result;
 }
 
+console.log(mapNextGreater([4, 6, 3, 2, 8, 1]));
+
 function mapNextGreater2(array) {
   const result = new Array(array.length);
   const stack = [];

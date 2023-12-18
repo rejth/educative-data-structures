@@ -1,7 +1,9 @@
 function reverseK1(arr, k) {
-  const slicedK = arr.slice(0, 5).reverse();
-  return slicedK.concat(arr.slice(5));
+  const slicedK = arr.slice(0, k).reverse();
+  return slicedK.concat(arr.slice(k));
 }
+
+console.log(reverseK1([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 5));
 
 function reverseK2(arr, k) {
   const result = new Array(arr.length);
@@ -17,6 +19,8 @@ function reverseK2(arr, k) {
 
   return result;
 }
+
+console.log(reverseK2([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 5));
 
 function reverseK3(arr, k) {
   const stack = arr.slice(0, k);
