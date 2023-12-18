@@ -6,6 +6,7 @@
     "format:fix": "prettier  --write src/**/*.js",
     "lint:check": "eslint --debug src/**/*.js",
     "lint:fix": "eslint src/**/*.js --fix",
+    "pre-commit": "lint-staged",
     "prepare": "husky install"
   },
   "author": "",
@@ -20,7 +21,8 @@
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
-    "prettier": "^3.0.3",
-    "husky": "^8.0.0"
+    "husky": "^8.0.0",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.0.3"
   }
 }
