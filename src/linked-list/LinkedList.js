@@ -165,7 +165,7 @@ class LinkedList {
     let current = this.head;
 
     while (current) {
-      process.stdout.write(String(temp.data));
+      process.stdout.write(String(current.data));
       process.stdout.write(' -> ');
       current = current.next;
     }

@@ -150,8 +150,10 @@ minHeap.push(2);
 minHeap.push(5);
 minHeap.push(1);
 
-// console.log(minHeap.heap)
-// console.log(minHeap.pop())
-// console.log(minHeap.heap)
+console.log(minHeap.heap);
+
+console.log(minHeap.pop()); // 1
+console.log(minHeap.pop()); // 2
+console.log(minHeap.pop()); // 5
 
 console.log(minHeap.findKSmallest(3));
