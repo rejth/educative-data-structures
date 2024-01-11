@@ -16,7 +16,7 @@ class Node {
     The worst-case time complexity is O(n) for skewed BSTs, where “n” is the number of nodes in the tree.
     However, in the best-case scenario, when the tree is completely balanced, the time complexity for basic operations is O(log(n))
 * */
-class BinarySearchTree {
+export class BinarySearchTree {
   constructor(rootValue) {
     this.root = new Node(rootValue);
   }
@@ -72,7 +72,7 @@ class BinarySearchTree {
   }
 
   // O(log(n)) if a BST is balanced
-  // Otherwise - O(h), h - the height of the BST
+  // Otherwise - O(h), h - the height of the BST,
   // However, when a node is deleted it usually becomes unbalanced
   delete(currentNode, value) {
     if (!currentNode) return false;
@@ -90,7 +90,7 @@ class BinarySearchTree {
     // the node to be deleted was not found
     if (!currentNode) return false;
 
-    // if the node to be deleted is a leaf, i.e. left and right children are equal to null
+    // if the node to be deleted is a leaf, i.e., left and right children are equal to null,
     // we'll link the right child to the parent of the node to be deleted
     if (!currentNode.leftChild && !currentNode.rightChild) {
       if (currentNode.value === this.root.value) {
@@ -104,7 +104,7 @@ class BinarySearchTree {
         return true;
       }
     } else if (!currentNode.rightChild) {
-      // if the node to be deleted has a left child only
+      // if the node to be deleted has a left child only,
       // we'll link the left child to the parent of the node to be deleted
       if (currentNode.value === this.root.value) {
         this.root = currentNode.leftChild;
@@ -117,7 +117,7 @@ class BinarySearchTree {
         return true;
       }
     } else if (!currentNode.leftChild) {
-      // if the node to be deleted has a right child only
+      // if the node to be deleted has a right child only,
       // we'll link the right child to the parent of the node to be deleted
       if (currentNode.value === this.root.value) {
         this.root = currentNode.rightChild;
@@ -149,7 +149,7 @@ class BinarySearchTree {
   }
 
   // O(log(n)) if a BST is balanced
-  // Otherwise - O(h), h - the height of the BST
+  // Otherwise - O(h), h - the height of the BST,
   // However, when a node is inserted into a BST it usually becomes unbalanced
   insert(value) {
     if (!this.root) {
@@ -176,12 +176,24 @@ class BinarySearchTree {
     }
   }
 
+  invert(root) {
+    if (!root) return null;
+
+    // Swap the left and right children of the current node
+    [root.leftChild, root.rightChild] = [root.rightChild, root.leftChild];
+
+    this.invert(root.leftChild);
+    this.invert(root.rightChild);
+
+    return root;
+  }
+
   // O(h), h - the height of the BST
   // in the worst case, the BST will be left-skewed and the height will be n, so the time complexity will be O(n)
-  findMin(rootNode) {
-    if (!rootNode) return undefined;
+  findMin(root) {
+    if (!root) return undefined;
 
-    let currentNode = rootNode;
+    let currentNode = root;
     let parent;
 
     while (currentNode) {
@@ -193,10 +205,10 @@ class BinarySearchTree {
   }
 
   // O(h), h - the height of the BST
-  findKthMax(rootNode, k) {
-    if (!rootNode || k < 0) return undefined;
+  findKthMax(root, k) {
+    if (!root || k < 0) return undefined;
 
-    let currentNode = rootNode;
+    let currentNode = root;
     let height = 0;
     let parent;
 
@@ -210,11 +222,11 @@ class BinarySearchTree {
   }
 
   // O(n)
-  findAncestors(rootNode, value) {
-    if (!rootNode || !value) return undefined;
+  findAncestors(root, value) {
+    if (!root || !value) return undefined;
 
     const ancestors = [];
-    let currentNode = rootNode;
+    let currentNode = root;
     let parent;
 
     while (currentNode && currentNode.value !== value) {
@@ -231,10 +243,10 @@ class BinarySearchTree {
   }
 
   // O(n)
-  findHeight(rootNode) {
-    if (!rootNode) return undefined;
+  findHeight(root) {
+    if (!root) return undefined;
 
-    let currentNode = rootNode;
+    let currentNode = root;
     let heightLeft = 0;
     let heightRight = 0;
 
@@ -243,7 +255,7 @@ class BinarySearchTree {
       heightLeft++;
     }
 
-    currentNode = rootNode;
+    currentNode = root;
 
     while (currentNode) {
       currentNode = currentNode.rightChild;
@@ -254,7 +266,7 @@ class BinarySearchTree {
   }
 
   // O(n)
-  findKNodes(rootNode, k) {
+  findKNodes(root, k) {
     const traverse = (currentNode, k, kNodes = []) => {
       if (!currentNode) return kNodes;
       if (k === 0) kNodes.push(currentNode.value);
@@ -291,6 +303,8 @@ console.log(bst.findKthMax(bst.root, 3));
 console.log(bst.findAncestors(bst.root, 10));
 console.log(bst.findHeight(bst.root));
 console.log(bst.findKNodes(bst.root, 2));
+
+console.log(bst.preOrderTraversal(bst.invert(bst.root)));
 
 bst.delete(bst.root, 12);
 console.log(bst.root);
