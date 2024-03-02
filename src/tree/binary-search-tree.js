@@ -1,4 +1,4 @@
-class Node {
+class TreeNode {
   constructor(value) {
     this.value = value;
     this.leftChild = null;
@@ -18,7 +18,7 @@ class Node {
 * */
 export class BinarySearchTree {
   constructor(rootValue) {
-    this.root = new Node(rootValue);
+    this.root = new TreeNode(rootValue);
   }
 
   // the elements are traversed in “root-left-right” order,
@@ -153,7 +153,7 @@ export class BinarySearchTree {
   // However, when a node is inserted into a BST it usually becomes unbalanced
   insert(value) {
     if (!this.root) {
-      this.root = new Node(value);
+      this.root = new TreeNode(value);
       return;
     }
 
@@ -170,20 +170,24 @@ export class BinarySearchTree {
     }
 
     if (value < parent.value) {
-      parent.leftChild = new Node(value);
+      parent.leftChild = new TreeNode(value);
     } else {
-      parent.rightChild = new Node(value);
+      parent.rightChild = new TreeNode(value);
     }
   }
 
   invert(root) {
-    if (!root) return null;
+    const stack = [root];
 
-    // Swap the left and right children of the current node
-    [root.leftChild, root.rightChild] = [root.rightChild, root.leftChild];
+    while (stack.length > 0) {
+      const current = stack.pop();
 
-    this.invert(root.leftChild);
-    this.invert(root.rightChild);
+      if (current) {
+        [current.leftChild, current.rightChild] = [current.rightChild, current.leftChild];
+        stack.push(current.leftChild);
+        stack.push(current.rightChild);
+      }
+    }
 
     return root;
   }
@@ -204,21 +208,62 @@ export class BinarySearchTree {
     return parent.value;
   }
 
-  // O(h), h - the height of the BST
-  findKthMax(root, k) {
-    if (!root || k < 0) return undefined;
+  findMax(root) {
+    if (!root) return undefined;
 
     let currentNode = root;
-    let height = 0;
     let parent;
 
-    while (currentNode && height <= k) {
+    while (currentNode) {
       parent = currentNode;
       currentNode = currentNode.rightChild;
-      height++;
     }
 
     return parent.value;
+  }
+
+  findKSmallest(root, k) {
+    if (!root || k < 0) return undefined;
+
+    const stack = [];
+
+    while (true) {
+      while (root) {
+        stack.push(root);
+        root = root.leftChild;
+      }
+
+      root = stack.pop();
+      k--;
+
+      if (k === 0) {
+        return root.value;
+      }
+
+      root = root.rightChild;
+    }
+  }
+
+  findKthGreatest(root, k) {
+    if (!root || k < 0) return undefined;
+
+    const stack = [];
+
+    while (true) {
+      while (root) {
+        stack.push(root);
+        root = root.rightChild;
+      }
+
+      root = stack.pop();
+      k--;
+
+      if (k === 0) {
+        return root.value;
+      }
+
+      root = root.leftChild;
+    }
   }
 
   // O(n)
@@ -232,6 +277,7 @@ export class BinarySearchTree {
     while (currentNode && currentNode.value !== value) {
       parent = currentNode;
       ancestors.push(parent.value);
+
       if (value < currentNode.value) {
         currentNode = currentNode.leftChild;
       } else {
@@ -242,27 +288,115 @@ export class BinarySearchTree {
     return ancestors;
   }
 
-  // O(n)
+  /**
+   * A binary tree's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+   *
+   * @param {*} root
+   * @returns
+   */
+  findMaxDepth(root) {
+    if (!root) return -1;
+    if (!root.leftChild && !root.rightChild) return 1;
+
+    const queue = [root];
+    let maxDepth = 0;
+
+    while (queue.length > 0) {
+      const levelSize = queue.length;
+
+      for (let i = 0; i < levelSize; i++) {
+        const current = queue.shift();
+
+        if (current.leftChild) {
+          queue.push(current.leftChild);
+        }
+        if (current.rightChild) {
+          queue.push(current.rightChild);
+        }
+      }
+
+      maxDepth++;
+    }
+
+    return maxDepth;
+  }
+
+  /**
+   * A binary tree's height is the number of edges along the longest path from the root node down to the farthest leaf node.
+   *
+   * @param {*} root
+   * @returns
+   */
   findHeight(root) {
-    if (!root) return undefined;
+    if (!root) return -1;
 
-    let currentNode = root;
-    let heightLeft = 0;
-    let heightRight = 0;
+    let height = -1; // Initialize the height to -1 (for an empty tree)
+    const queue = [root];
 
-    while (currentNode) {
-      currentNode = currentNode.leftChild;
-      heightLeft++;
+    while (queue.length > 0) {
+      const levelSize = queue.length;
+
+      for (let i = 0; i < levelSize; i++) {
+        const current = queue.shift();
+
+        if (current.leftChild) {
+          queue.push(current.leftChild);
+        }
+        if (current.rightChild) {
+          queue.push(current.rightChild);
+        }
+      }
+
+      height++;
     }
 
-    currentNode = root;
+    return height;
+  }
 
-    while (currentNode) {
-      currentNode = currentNode.rightChild;
-      heightRight++;
-    }
+  /**
+   * A binary tree's diameter is
+   *
+   * @returns
+   */
+  findDiameter(root) {
+    if (!root) return 0;
+    let diameter = 0;
 
-    return Math.max(heightLeft, heightRight);
+    const height = (node) => {
+      if (!node) return 0;
+
+      const leftHeight = height(node.left);
+      const rightHeight = height(node.right);
+
+      diameter = Math.max(diameter, leftHeight + rightHeight);
+      return Math.max(leftHeight, rightHeight) + 1;
+    };
+
+    height(root);
+    return diameter;
+  }
+
+  /**
+   * A balanced BST is defined as follows:
+   * 1. The difference between the height of the right subtree and the left subtree is, at most, one for each node in the tree:
+   * ∣Height(LeftSubTree) − Height(RightSubTree)∣ <= 1
+   *
+   * @returns
+   */
+  isBalancedBST() {
+    return false;
+  }
+
+  /**
+   * A valid BST is defined as follows:
+   * 1. The left subtree of a node contains only nodes with keys less than the node's key
+   * 2. The right subtree of a node contains only nodes with keys greater than the node's key
+   * 3. Both the left and right subtrees must also be binary search trees (in which each node has between 0-2 children)
+   *
+   * @returns
+   */
+  isValidBST() {
+    return false;
   }
 
   // O(n)
@@ -291,20 +425,20 @@ bst.insert(12);
 bst.insert(10);
 bst.insert(14);
 
-console.log(bst.root);
-console.log(bst.preOrderTraversal(bst.root));
-console.log(bst.inOrderTraversal(bst.root));
-console.log(bst.postOrderTraversal(bst.root));
-
-console.log(bst.search(9));
-
-console.log(bst.findMin(bst.root));
-console.log(bst.findKthMax(bst.root, 3));
-console.log(bst.findAncestors(bst.root, 10));
-console.log(bst.findHeight(bst.root));
-console.log(bst.findKNodes(bst.root, 2));
+// console.log(bst.root);
+// console.log(bst.preOrderTraversal(bst.root));
+// console.log(bst.inOrderTraversal(bst.root));
+// console.log(bst.postOrderTraversal(bst.root));
+//
+// console.log(bst.search(9));
+//
+// console.log(bst.findMin(bst.root));
+// console.log(bst.findKthMax(bst.root, 3));
+// console.log(bst.findAncestors(bst.root, 10));
+// console.log(bst.findHeight(bst.root));
+// console.log(bst.findKNodes(bst.root, 2));
 
 console.log(bst.preOrderTraversal(bst.invert(bst.root)));
 
-bst.delete(bst.root, 12);
-console.log(bst.root);
+// bst.delete(bst.root, 12);
+// console.log(bst.root);
