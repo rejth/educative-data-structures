@@ -289,10 +289,10 @@ export class BinarySearchTree {
   }
 
   /**
-   * A binary tree's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+   * A binary tree's maximum depth is the number of NODES along the longest path from the root node down to the farthest leaf node.
    *
-   * @param {*} root
-   * @returns
+   * @param {TreeNode} root
+   * @return {number}
    */
   findMaxDepth(root) {
     if (!root) return -1;
@@ -322,10 +322,10 @@ export class BinarySearchTree {
   }
 
   /**
-   * A binary tree's height is the number of edges along the longest path from the root node down to the farthest leaf node.
+   * A binary tree's height is the number of EDGES along the longest path from the root node down to the farthest leaf node.
    *
-   * @param {*} root
-   * @returns
+   * @param {TreeNode} root
+   * @return {number}
    */
   findHeight(root) {
     if (!root) return -1;
@@ -354,9 +354,13 @@ export class BinarySearchTree {
   }
 
   /**
-   * A binary tree's diameter is
+   * A binary tree's diameter is the length of the longest path between any two nodes in a tree.
+   * This path may or may not pass through the root.
    *
-   * @returns
+   * The length of a path between two nodes is represented by the number of EDGES between them.
+   *
+   * @param {TreeNode} root
+   * @return {number}
    */
   findDiameter(root) {
     if (!root) return 0;
@@ -377,14 +381,30 @@ export class BinarySearchTree {
   }
 
   /**
-   * A balanced BST is defined as follows:
+   * A height-balanced BST is defined as follows:
    * 1. The difference between the height of the right subtree and the left subtree is, at most, one for each node in the tree:
    * ∣Height(LeftSubTree) − Height(RightSubTree)∣ <= 1
    *
-   * @returns
+   * @param {TreeNode} root
+   * @return {boolean}
    */
-  isBalancedBST() {
-    return false;
+  isBalancedBST(root) {
+    if (!root) return -1;
+
+    const checkHeight = (node) => {
+      if (!node) return 0;
+
+      const leftHeight = checkHeight(node.left);
+      const rightHeight = checkHeight(node.right);
+
+      if (leftHeight === -1 || rightHeight === -1 || Math.abs(leftHeight - rightHeight) > 1) {
+        return -1;
+      }
+
+      return Math.max(leftHeight, rightHeight) + 1;
+    };
+
+    return checkHeight(root) !== -1;
   }
 
   /**
@@ -393,10 +413,39 @@ export class BinarySearchTree {
    * 2. The right subtree of a node contains only nodes with keys greater than the node's key
    * 3. Both the left and right subtrees must also be binary search trees (in which each node has between 0-2 children)
    *
-   * @returns
+   * @param {TreeNode} root
+   * @return {boolean}
    */
-  isValidBST() {
-    return false;
+  isValidBST(root) {
+    if (!root) return false;
+
+    const inOrderTraversal = (node) => {
+      const stack = [];
+      const traversal = [];
+
+      let current = node;
+
+      while (stack.length > 0 || current) {
+        while (current) {
+          stack.push(current);
+          current = current.left;
+        }
+
+        current = stack.pop();
+        traversal.push(current.val);
+        current = current.right;
+      }
+
+      return traversal;
+    };
+
+    const values = inOrderTraversal(root);
+
+    for (let i = 1; i < values.length; i++) {
+      if (values[i] <= values[i - 1]) return false;
+    }
+
+    return true;
   }
 
   // O(n)
